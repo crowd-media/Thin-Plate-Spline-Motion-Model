@@ -63,6 +63,14 @@ def load_checkpoints(config_path, checkpoint_path, device):
     
     return inpainting, kp_detector, dense_motion_network, avd_network
 
+## TODO: see how to show progress in streamlit without importing here
+use_stqdm = False
+try:
+    from stqdm import stqdm
+    use_stqdm = True
+except ImportError:
+    use_stqdm = False
+
 
 def make_animation(source_image, driving_video, inpainting_network, kp_detector, dense_motion_network, avd_network, device, mode = 'relative'):
     assert mode in ['standard', 'relative', 'avd']
@@ -73,8 +81,14 @@ def make_animation(source_image, driving_video, inpainting_network, kp_detector,
         driving = torch.tensor(np.array(driving_video)[np.newaxis].astype(np.float32)).permute(0, 4, 1, 2, 3).to(device)
         kp_source = kp_detector(source)
         kp_driving_initial = kp_detector(driving[:, :, 0])
+        
+        ## TODO: see how to show progress in streamlit without importing stqdm here
+        if use_stqdm:
+            enumerate_predictions= stqdm(range(driving.shape[2]), backend=True, frontend=True)
+        else:
+            enumerate_predictions= tqdm(range(driving.shape[2]))
 
-        for frame_idx in tqdm(range(driving.shape[2])):
+        for frame_idx in enumerate_predictions:
             driving_frame = driving[:, :, frame_idx]
             driving_frame = driving_frame.to(device)
             kp_driving = kp_detector(driving_frame)
