@@ -1,5 +1,5 @@
 dataset_params:
-  root_dir: /home/ubuntu/efs/data/Casual_Conversation_dataset_torso
+  root_dir: /home/ubuntu/efs/data/UER_torso
   frame_shape: [384, 384, 3]
   id_sampling: False
   augmentation_params:
@@ -34,14 +34,14 @@ model_params:
 
 
 train_params:
-  num_epochs: 10
+  num_epochs: 30
   num_repeats: 1
   epoch_milestones: [70, 90]
   lr_generator: 2.0e-4
   batch_size: 4
   scales: [1, 0.5, 0.25, 0.125]
   dataloader_workers: 4
-  checkpoint_freq: 1
+  checkpoint_freq: 10
   dropout_epoch: 35
   dropout_maxp: 0.3
   dropout_startp: 0.1
