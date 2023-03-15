@@ -34,7 +34,7 @@ model_params:
 
 
 train_params:
-  num_epochs: 30
+  num_epochs: 20
   num_repeats: 1
   epoch_milestones: [70, 90]
   lr_generator: 2.0e-4
